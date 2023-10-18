@@ -9,7 +9,7 @@ function respond($result = null, $message = 'Success', $code = 200)
     $data['status'] = $code >= 400 ? 'error' : 'ok';
     $data['message'] = $message;
     $data['code'] = $code;
-    $data['result'] = $result ? json_encode($result) : null;
+    $data['result'] = $result;
 
     echo json_encode($data);
     exit;
