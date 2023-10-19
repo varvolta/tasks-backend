@@ -47,7 +47,7 @@ if ($method === 'GET') {
     $create_date = $data['create_date'] ?? null;
 
     if ($title === null || $priority === null || $create_date === null) {
-        respond(null, Responses::MISSING_IMPORTANT_FIELDS);
+        respond(null, Responses::MISSING_IMPORTANT_FIELDS, 400);
     }
 
     $query = "INSERT INTO tasks (user_id, title, description, priority, due_date, create_date) VALUES ('{$user_id}', '{$title}', '{$description}', '{$priority}', '{$due_date}', '{$create_date}')";
@@ -69,7 +69,7 @@ if ($method === 'GET') {
     $due_date = $data['due_date'] ?? null;
 
     if ($id === null || $title === null || $priority === null) {
-        respond(null, Responses::MISSING_IMPORTANT_FIELDS);
+        respond(null, Responses::MISSING_IMPORTANT_FIELDS, 400);
     }
 
     $query = "UPDATE tasks SET title = '{$title}', description = '{$description}', priority = '{$priority}', due_date = '{$due_date}' WHERE id = '{$id}'";
@@ -78,10 +78,24 @@ if ($method === 'GET') {
     if (mysqli_affected_rows($connection) > 0) {
         respond(null, Responses::TASK_UPDATED);
     } else {
-        respond(null, Responses::COULD_NOT_UPDATE_TASK);
+        respond(null, Responses::COULD_NOT_UPDATE_TASK, 400);
     }
 } else if ($method === 'DELETE') {
+    $user_id = authenticate($connection);
 
+    $id = $_GET['id'] ?? null;
+
+    if ($id === null) {
+        respond(null, Responses::MISSING_IMPORTANT_FIELDS, 400);
+    }
+
+    $query = "DELETE FROM tasks WHERE id = '{$id}'";
+    $result = mysqli_query($connection, $query);
+    if (mysqli_affected_rows($connection) > 0) {
+        respond(null, Responses::TASK_DELETED);
+    } else {
+        respond(null, Responses::COULD_NOT_DELETE_TASK, 400);
+    }
 }
 
 ?>

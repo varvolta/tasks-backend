@@ -16,7 +16,9 @@ class Responses
     const MISSING_IMPORTANT_FIELDS = 'Missing important fields';
     const TASK_CREATED = 'Task created';
     const TASK_UPDATED = 'Task updated';
+    const TASK_DELETED = 'Task deleted';
     const COULD_NOT_UPDATE_TASK = 'Could not update task';
+    const COULD_NOT_DELETE_TASK = 'Could not delete task';
 }
 
 ?>
