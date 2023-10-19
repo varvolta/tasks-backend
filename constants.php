@@ -1,6 +1,9 @@
 <?php
 class Responses
 {
+    // Index
+    const API_IS_WORKING = 'API is working';
+
     // Auth
     const USER_CREATED = 'User created';
     const EMAIL_ALREADY_REGISTERED = 'Email already registered';
