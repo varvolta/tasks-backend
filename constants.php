@@ -1,8 +1,20 @@
 <?php
+
+class Database
+{
+    const HOST = 'localhost';
+    const USER = 'root';
+    const PASSWORD = '';
+    const DATABASE = 'tasksapp';
+}
+
 class Responses
 {
     // Index
     const API_IS_WORKING = 'API is working';
+
+    // Database
+    const COULD_NOT_CONNECT_TO_DATABASE = 'Could not connect to database';
 
     // Auth
     const USER_CREATED = 'User created';
