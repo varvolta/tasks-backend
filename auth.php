@@ -20,28 +20,43 @@ function create_session($connection, $user_id)
 
     return $token;
 }
+
 if ($method === 'GET') {
-    $email = $_GET['email'] ?? null;
-    $password = $_GET['password'] ?? null;
+    $type = $_GET['type'] ?? 'login';
 
-    if ($email && $password) {
-        $email = mysqli_real_escape_string($connection, $email);
-        $password = mysqli_real_escape_string($connection, $password);
-        $password = md5($password);
+    if ($type === 'login') {
+        $email = $_GET['email'] ?? null;
+        $password = $_GET['password'] ?? null;
+        if ($email && $password) {
+            $email = mysqli_real_escape_string($connection, $email);
+            $password = mysqli_real_escape_string($connection, $password);
+            $password = md5($password);
 
-        $query = "SELECT id FROM users WHERE email = '{$email}' AND password = '{$password}'";
-        $result = mysqli_query($connection, $query);
-        if (mysqli_num_rows($result) > 0) {
-            $row = $result->fetch_assoc();
-            $id = $row['id'];
-            $token = create_session($connection, $id);
+            $query = "SELECT id FROM users WHERE email = '{$email}' AND password = '{$password}'";
+            $result = mysqli_query($connection, $query);
+            if (mysqli_num_rows($result) > 0) {
+                $row = $result->fetch_assoc();
+                $id = $row['id'];
+                $token = create_session($connection, $id);
 
-            respond(array('token' => $token), Responses::SESSION_CREATED);
+                respond(array('token' => $token), Responses::SESSION_CREATED);
+            } else {
+                respond(null, Responses::EMAIL_OR_PASSWORD_IS_WRONG, 400);
+            }
         } else {
-            respond(null, Responses::EMAIL_OR_PASSWORD_IS_WRONG, 400);
+            respond(null, Responses::EMAIL_OR_PASSWORD_IS_MISSING, 400);
         }
-    } else {
-        respond(null, Responses::EMAIL_OR_PASSWORD_IS_MISSING, 400);
+    } else if ($type === 'check') {
+        $token = $_GET['token'] ?? null;
+        $token = mysqli_real_escape_string($connection, $token);
+        $now = time();
+
+        if ($token) {
+            $query = "SELECT * FROM sessions WHERE token = '{$token}' AND expire_date >= '{$now}'";
+            $result = mysqli_query($connection, $query);
+
+            respond(array("expired" => mysqli_num_rows($result) > 0));
+        }
     }
 } else if ($method === 'POST') {
     $body = file_get_contents('php://input');
