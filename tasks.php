@@ -18,7 +18,7 @@ function authenticate($connection)
         if (mysqli_num_rows($result) === 0) {
             respond(null, Responses::UNEXISTING_OR_EXPIRED_SESSION, 400);
         }
-        $row = $result->fetch_assoc();
+        $row = mysqli_fetch_assoc($result);
         return $row['user_id'];
     } else {
         respond(null, Responses::TOKEN_NOT_SET, 400);
