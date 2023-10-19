@@ -55,7 +55,7 @@ if ($method === 'GET') {
             $query = "SELECT * FROM sessions WHERE token = '{$token}' AND expire_date >= '{$now}'";
             $result = mysqli_query($connection, $query);
 
-            respond(array("expired" => mysqli_num_rows($result) > 0));
+            respond(array("expired" => mysqli_num_rows($result) === 0));
         }
     }
 } else if ($method === 'POST') {

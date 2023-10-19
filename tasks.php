@@ -43,6 +43,7 @@ if ($method === 'GET') {
     $title = $data['title'] ?? null;
     $description = $data['description'] ?? null;
     $priority = $data['priority'] ?? null;
+    $done = $data['done'] ?? false;
     $due_date = $data['due_date'] ?? null;
     $create_date = $data['create_date'] ?? null;
 
@@ -50,7 +51,7 @@ if ($method === 'GET') {
         respond(null, Responses::MISSING_IMPORTANT_FIELDS, 400);
     }
 
-    $query = "INSERT INTO tasks (user_id, title, description, priority, due_date, create_date) VALUES ('{$user_id}', '{$title}', '{$description}', '{$priority}', '{$due_date}', '{$create_date}')";
+    $query = "INSERT INTO tasks (user_id, title, description, priority, done, due_date, create_date) VALUES ('{$user_id}', '{$title}', '{$description}', '{$priority}', '{$done}', '{$due_date}', '{$create_date}')";
     mysqli_query($connection, $query);
 
     $id = mysqli_insert_id($connection);
@@ -66,13 +67,14 @@ if ($method === 'GET') {
     $title = $data['title'] ?? null;
     $description = $data['description'] ?? null;
     $priority = $data['priority'] ?? null;
+    $done = $data['done'] ?? false;
     $due_date = $data['due_date'] ?? null;
 
     if ($id === null || $title === null || $priority === null) {
         respond(null, Responses::MISSING_IMPORTANT_FIELDS, 400);
     }
 
-    $query = "UPDATE tasks SET title = '{$title}', description = '{$description}', priority = '{$priority}', due_date = '{$due_date}' WHERE id = '{$id}'";
+    $query = "UPDATE tasks SET title = '{$title}', description = '{$description}', priority = '{$priority}', done = '{$done}', due_date = '{$due_date}' WHERE id = '{$id}'";
     $result = mysqli_query($connection, $query);
 
     if (mysqli_affected_rows($connection) > 0) {
