@@ -48,7 +48,7 @@ CREATE TABLE `tasks` (
   `title` varchar(1000) NOT NULL,
   `description` text DEFAULT NULL,
   `priority` enum('low','medium','high') NOT NULL DEFAULT 'medium',
-  `due_date` int(11) NOT NULL,
+  `due_date` int(11) DEFAULT NULL,
   `create_date` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
